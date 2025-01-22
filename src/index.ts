@@ -1,10 +1,17 @@
-type Person = { name: string };
-type Employ = { company: string };
-type Sample = Person & Employ;
+let num = 10 as never;
+// 10 은 number 이고
+// never 는 모든 타입의 SubType
+// 10 SuperType 이므로 단언이 가능함
 
-// 속성이 하나만 없어도 타입오류
-const whoa: Sample = { name: "hong" }; // 타입 오류
-const whob: Sample = { company: "green" }; // 타입 오류
-// Sample 타입은 Person 과 Employ 모두를 만족하는 타입이므로
-// 두 타입 모두의 속성을 가지고 있어야 한다.
-const whoc: Sample = { name: "hong", company: "green" };
+let num2 = 10 as unknown;
+// 10 은 number 이고
+// unknown 은 최상위 SuperType
+// 10 은 unknown 의 SubType 이므로 단언이 가능함
+
+let num3 = 10 as string;
+// 10 은 number 이고
+// string 은 number 의 SuperType 혹은 SubType 이 아님
+// 그래서 타입 단언이 불가능하다
+
+// 아래는 좋지 않은 타입단언의 예
+let num4 = 10 as unknown as string;
