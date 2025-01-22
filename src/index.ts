@@ -1,17 +1,17 @@
-let num = 10 as never;
-// 10 은 number 이고
-// never 는 모든 타입의 SubType
-// 10 SuperType 이므로 단언이 가능함
+type Person = {
+  name: string;
+  age: number;
+};
 
-let num2 = 10 as unknown;
-// 10 은 number 이고
-// unknown 은 최상위 SuperType
-// 10 은 unknown 의 SubType 이므로 단언이 가능함
-
-let num3 = 10 as string;
-// 10 은 number 이고
-// string 은 number 의 SuperType 혹은 SubType 이 아님
-// 그래서 타입 단언이 불가능하다
-
-// 아래는 좋지 않은 타입단언의 예
-let num4 = 10 as unknown as string;
+function func(value: string | number | Date | null | Person) {
+  if (typeof value === "string") {
+    value.toUpperCase();
+  } else if (typeof value === "number") {
+    value.toFixed(2);
+  } else if (value instanceof Date) {
+    // Date 타입만을 뜻하는게 보장됨
+    value.getTime();
+  } else if ("age" in (value as Person)) {
+    (value as Person).age;
+  }
+}
