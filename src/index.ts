@@ -1,17 +1,21 @@
-type Person = {
-  name: string;
-  age: number;
-};
+import { log } from "console";
 
-function func(value: string | number | Date | null | Person) {
-  if (typeof value === "string") {
-    value.toUpperCase();
-  } else if (typeof value === "number") {
-    value.toFixed(2);
-  } else if (value instanceof Date) {
-    // Date 타입만을 뜻하는게 보장됨
-    value.getTime();
-  } else if ("age" in (value as Person)) {
-    (value as Person).age;
+type Cat = { kind: "CAT"; sound: string; color: string };
+type Dog = { kind: "DOG"; sound: string; food: string };
+type Bird = { kind: "BIRD"; sound: string; fly: boolean };
+type Animal = Cat | Dog | Bird;
+
+// 동물의 울음소리를 출력하는 기능
+function song(what: Animal) {
+  switch (what.kind) {
+    case "CAT":
+      console.log(`${what.color} 고양이는 ${what.sound}`);
+      break;
+    case "DOG":
+      console.log(`개가 ${what.sound}하고 ${what.food}를 달라고 합니다`);
+      break;
+    case "BIRD":
+      console.log(`새가 짹짹하고 울고 있습니다.`);
+      break;
   }
 }
