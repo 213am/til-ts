@@ -1,13 +1,34 @@
-interface Person {}
-interface Person {
+interface CarInterface {
   name: string;
-  age: number;
-}
-interface Male extends Person {
-  name: "MALE";
+  brand: string;
+  price: number;
+  move(): void;
+  stop(): void;
 }
 
-const who: Male = {
-  name: "홍", // 오류(타입 에러)
-  age: 10,
-};
+interface ElectricInterface {
+  isBattery: boolean;
+  battery: number;
+}
+
+// implements 는 다중 상속이 가능
+// 속성은 private, protected 가 될 수 없다. pubilc 만 가능
+class ElectricCar implements CarInterface, ElectricInterface {
+  constructor(
+    public name: string,
+    public brand: string,
+    public price: number,
+    public isBattery: boolean,
+    public battery: number
+  ) {}
+  move() {
+    console.log("출발");
+  }
+  stop() {
+    console.log("정지");
+  }
+}
+
+let MyCar = new ElectricCar("캐스퍼", "현대", 1000, false, 0);
+MyCar.move();
+MyCar.stop();
