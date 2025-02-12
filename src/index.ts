@@ -1,34 +1,11 @@
-interface CarInterface {
-  name: string;
-  brand: string;
-  price: number;
-  move(): void;
-  stop(): void;
+// 함수 리턴타입에서 리턴종류를 모르면
+// any 또는 void 를 리턴한다
+// 만약 원하는 것이 있다면 정확히 작성해야 한다
+function showValue<T>(value: T): T {
+  return value;
 }
 
-interface ElectricInterface {
-  isBattery: boolean;
-  battery: number;
-}
-
-// implements 는 다중 상속이 가능
-// 속성은 private, protected 가 될 수 없다. pubilc 만 가능
-class ElectricCar implements CarInterface, ElectricInterface {
-  constructor(
-    public name: string,
-    public brand: string,
-    public price: number,
-    public isBattery: boolean,
-    public battery: number
-  ) {}
-  move() {
-    console.log("출발");
-  }
-  stop() {
-    console.log("정지");
-  }
-}
-
-let MyCar = new ElectricCar("캐스퍼", "현대", 1000, false, 0);
-MyCar.move();
-MyCar.stop();
+let test1 = showValue(10);
+let test2 = showValue("안녕");
+let test3 = showValue(true);
+let test4 = showValue([1, 2, 3]);
