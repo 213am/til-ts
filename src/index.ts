@@ -1,71 +1,106 @@
 /**
- * key value 맵핑
+ * Utility
  */
-enum State {
-  LOADING,
-  SUCCESS,
-  ERROR,
-  INITIAL,
+
+// Partial Type ( 가장 많이 사용하는 Utility 타입 )
+// 모든 속성에 ?(옵셔널)을 붙인다
+// 객체의 일부분만 수정이 가능하도록
+interface Idol {
+  name: string;
+  age: number;
+  groupName: string;
 }
-// API 타입 1
-type ApiState = {
-  getUser: State | string | number | undefined;
-  paginateUser: State | undefined;
-  defeceUser: State | undefined;
-  getPost: State;
+const suji: Idol = {
+  name: "수지",
+  age: 32,
+  groupName: "blackPink",
 };
 
-// API 타입 2
-type UserApiState2 = {
-  getUser: State | string | number;
-  paginateUser: State | undefined;
-  defeceUser: State | undefined;
-};
+type IdolPartial = Partial<Idol>;
+function updateIdol(origin: Idol, update: IdolPartial): Idol {
+  return { ...origin, ...update };
+}
+const suzi = updateIdol(suji, { age: 24 });
 
-// API 타입 3
-// 아래처럼 구성하면 타입이 변경되어도 추가 작업이 필요없다
-type UserApiState3 = {
-  getUser: ApiState["getUser"];
-  paginateUser: ApiState["paginateUser"];
-  defeceUser: ApiState["defeceUser"];
-};
+// Required ( 모두 필수 속성으로 바꿈 )
+interface Cat {
+  name: string;
+  age?: number;
+  breed?: string;
+}
+type CatReq = Required<Cat>;
 
-// API 타입 4
-type UserApiState4 = {
-  [key in "getUser" | "paginateUser" | "defeceUser"]: ApiState[key];
-};
+// Readonly ( 모두 읽기전용 속성으로 바꿈 )
+interface Dog {
+  name: string;
+  age?: number;
+  breed?: string;
+}
+type DogReadonly = Readonly<Dog>;
 
-// API 타입 5 - 유틸리티 타입
-// Pick 원하는 것만 뽑아서 가져올 경우
-type UserApiState5 = Pick<ApiState, "getUser" | "paginateUser" | "defeceUser">;
-// Omit 원하는 것만 제외하고 가져올 경우
-type UserApiState55 = Omit<ApiState, "getPost">;
+// Pick( 특정 속성만 선택해서 사용 )
+interface Mouse {
+  name: string;
+  age?: number;
+  breed?: string;
+}
+type MousePick = Pick<Mouse, "age" | "breed">;
 
-/**
- * keyof
- */
-type AllKeys = keyof ApiState;
-const key1: AllKeys = "getUser";
-const key2: AllKeys = "paginateUser";
-const key3: AllKeys = "defeceUser";
-const key4: AllKeys = "getPost";
-const key5: AllKeys = "getData"; // 오류
+// Omit ( 특성 속성만 제외하고 선택 )
+interface Mongkey {
+  name: string;
+  age?: number;
+  breed?: string;
+}
+type MonkeyOmit = Omit<Mongkey, "name">;
 
-// API 타입 6
-// 속성 모두 가져오기
-type UserApiState6 = {
-  [key in keyof ApiState]: ApiState[key];
-};
+// Exclude ( 특정 타입을 제외하고 사용 )
+type NoString = Exclude<string | boolean | number, string>;
 
-// 유틸리티 사용해보기
-// 속성 한개 제외하고 가져오기
-type UserApiState7 = {
-  // "getPost" 속성을 제외하고 나머지를 뽑아서 정의
-  [key in Exclude<keyof ApiState, "getPost">]: ApiState[key];
-};
+type Candy = "초코" | "딸기" | "바나나" | "사과";
+type RemainingCandy = Exclude<Candy, "초코" | "바나나">;
 
-// 속성 한개 제외하고 모두 옵션으로 변경
-type UserApiState8 = {
-  // "getPost" 속성을 제외하고 나머지를 뽑아서 정의
-  [key in Exclude<keyof ApiState, "getPost">]?: ApiState[key];
-};
+// Extract ( 특정 타입을 추출해서 사용 )
+type NoString2 = Extract<string | boolean | number, string>;
+
+type Candy2 = "초코" | "딸기" | "바나나" | "사과";
+type RemainingCandy2 = Extract<Candy, "초코" | "바나나">;
+
+// Parameters (매개 변수 타입을 사용)
+function fun(x: number, y: number, z: boolean) {}
+// type TParams = [x: number, y: number, z: boolean]
+type TParams = Parameters<typeof fun>;
+// type TParamsVoid = [a: number]
+type TParamsVoid = Parameters<(a: number) => void>;
+
+// ConstructorParameters ( 생성자 함수의 타입 )
+class Idol {
+  name: string;
+  age: number;
+
+  constructor(name: string, age: number) {
+    this.name = name;
+    this.age = age;
+  }
+}
+// type TCS = [name: string, age: number]
+type TCS = ConstructorParameters<typeof Idol>;
+
+// ReturnType ( 함수의 리턴타입 )
+type sFn = (a: number) => number;
+// type RT = number
+type RT = ReturnType<sFn>;
+
+// type RT2 = void
+type RT2 = ReturnType<() => void>;
+
+// Template Literal Type
+type IU = "iU";
+// 모두 대문자로
+type UIU = Uppercase<IU>;
+// 모두 소문자로
+type sIU = Lowercase<IU>;
+// 첫글자를 대문자로
+type cIU = Capitalize<IU>;
+// 첫글자를 소문자로
+type uIU = Uncapitalize<IU>;
